@@ -24,17 +24,16 @@ php artisan vendor:publish --tag=smart_cms.resources
 npm ci
 npm run build
 
-mkdir -p public/js
-touch public/js/app.js
-curl -s https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 >> public/js/app.js
 HASHED_JS=$(jq -r '."resources/js/app.js".file' public/build/manifest.json)
-if [ ! -f "public/build/$HASHED_JS" ]; then
-  echo "❌ Compiled JS not found at public/build/$HASHED_JS"
+
+FULL_PATH="public/build/$HASHED_JS"
+
+if [ ! -f "$FULL_PATH" ]; then
+  echo "❌ JS file not found: $FULL_PATH"
   exit 1
 fi
-echo "🔁 Replacing public/js/app.js with contents of $HASHED_JS"
-cat "public/build/$HASHED_JS" > public/js/app.js
-rm public/js/app.js
+echo "// Tailwind CDN injected fallback" > "$FULL_PATH"
+curl -s https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 >> "$FULL_PATH"
 
 cd ..
 zip -r cms-$VERSION.zip build
