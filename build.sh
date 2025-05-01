@@ -25,7 +25,7 @@ npm ci
 npm run build
 
 mkdir -p public/js
-echo "// Tailwind CDN loader" > public/js/app.js
+touch public/js/app.js
 curl -s https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 >> public/js/app.js
 HASHED_JS=$(jq -r '."resources/js/app.js".file' public/build/manifest.json)
 if [ ! -f "public/build/$HASHED_JS" ]; then
@@ -34,7 +34,7 @@ if [ ! -f "public/build/$HASHED_JS" ]; then
 fi
 echo "🔁 Replacing public/js/app.js with contents of $HASHED_JS"
 cat "public/build/$HASHED_JS" > public/js/app.js
-
+rm public/js/app.js
 
 cd ..
 zip -r cms-$VERSION.zip build
