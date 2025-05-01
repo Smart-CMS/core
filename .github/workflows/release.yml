@@ -23,8 +23,8 @@ jobs:
 
       - name: Run build-release.sh
         run: |
-          chmod +x build-release.sh
-          ./build-release.sh ${{ steps.version.outputs.version }}
+          chmod +x build.sh
+          ./build.sh ${{ steps.version.outputs.version }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
