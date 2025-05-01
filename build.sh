@@ -21,9 +21,19 @@ touch database/database.sqlite
 composer install --no-dev --optimize-autoloader
 php artisan vendor:publish --tag=smart_cms.resources
 
-mkdir -p build/public/css
-curl -s https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 > build/public/css/app.js
-touch build/public/css/app.css
+npm ci
+npm run build
+
+mkdir -p public/js
+echo "// Tailwind CDN loader" > public/js/app.js
+curl -s https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 >> public/js/app.js
+HASHED_JS=$(jq -r '."resources/js/app.js".file' public/build/manifest.json)
+if [ ! -f "public/build/assets/$HASHED_JS" ]; then
+  echo "❌ Compiled JS not found at public/build/assets/$HASHED_JS"
+  exit 1
+fi
+echo "🔁 Replacing public/js/app.js with contents of $HASHED_JS"
+cat "public/build/assets/$HASHED_JS" > public/js/app.js
 
 cd ..
 zip -r cms-$VERSION.zip build
