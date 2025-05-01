@@ -1,4 +1,4 @@
-name: Build & Release Laravel CMS
+name: Build & Release SmartCMS
 
 on:
   push:
