@@ -17,12 +17,9 @@ rsync -a . build/ \
     --exclude=.env
 
 cd build
-
+touch database/database.sqlite
 composer install --no-dev --optimize-autoloader
-
-cp .env.example .env
-php artisan config:cache
-php artisan route:cache
+php artisan vendor:publish --tag=smart_cms.resources
 
 cd ..
 zip -r cms-$VERSION.zip build
