@@ -21,6 +21,10 @@ touch database/database.sqlite
 composer install --no-dev --optimize-autoloader
 php artisan vendor:publish --tag=smart_cms.resources
 
+mkdir -p build/public/css
+curl -s https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4 > build/public/css/app.js
+touch build/public/css/app.css
+
 cd ..
 zip -r cms-$VERSION.zip build
 
